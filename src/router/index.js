@@ -1,6 +1,7 @@
+
 import {
   createRouter,
-  createWebHistory
+  createWebHashHistory
 } from 'vue-router'
 
 import HomeView from '../views/HomeView.vue'
@@ -19,10 +20,9 @@ import GetAllBookAPI from '../views/GetAllBookAPI.vue'
 
 const router = createRouter({
 
-  history: createWebHistory(),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
 
   routes: [
-
     {
       path: '/',
       name: 'home',
@@ -88,7 +88,6 @@ const router = createRouter({
       name: 'GetAllBookAPI',
       component: GetAllBookAPI
     }
-
   ]
 })
 
