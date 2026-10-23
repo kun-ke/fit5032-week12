@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /books/{bookId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasAll(['isbn', 'name', 'author', 'genre', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['isbn', 'name', 'author', 'genre', 'createdAt'])
+        && request.resource.data.isbn is string
+        && request.resource.data.isbn.size() > 0
+        && request.resource.data.isbn.size() <= 40
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 200
+        && request.resource.data.author is string
+        && request.resource.data.author.size() > 0
+        && request.resource.data.author.size() <= 200
+        && request.resource.data.genre is string
+        && request.resource.data.genre.size() > 0
+        && request.resource.data.genre.size() <= 100
+        && request.resource.data.createdAt == request.time;
+
+      // Only the server Function changes the saved book.
+      allow update, delete: if false;
+    }
+  }
+}
